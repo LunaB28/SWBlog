@@ -1,33 +1,29 @@
 // Import necessary components from react-router-dom and other parts of the application.
 import { Link } from "react-router-dom";
-import useGlobalReducer from "../hooks/useGlobalReducer";  // Custom hook for accessing the global state.
+import { useStore } from "../store/store.js";
 
 export const Demo = () => {
-  // Access the global state and dispatch function using the useGlobalReducer hook.
-  const { store, dispatch } = useGlobalReducer()
+  // Acceso al estado global y dispatch usando useStore
+  const { state, dispatch } = useStore();
 
   return (
     <div className="container">
       <ul className="list-group">
-        {/* Map over the 'todos' array from the store and render each item as a list element */}
-        {store && store.todos?.map((item) => {
+        {/* Aquí deberías mapear sobre state.saved o state.favorite según tu lógica */}
+        {/* Ejemplo: */}
+        {state.saved && state.saved.map((item) => {
           return (
             <li
-              key={item.id}  // React key for list items.
+              key={item.uid}
               className="list-group-item d-flex justify-content-between"
-              style={{ background: item.background }}> 
-              
-              {/* Link to the detail page of this todo. */}
-              <Link to={"/single/" + item.id}>Link to: {item.title} </Link>
-              
-              <p>Open file ./store.js to see the global store that contains and updates the list of colors</p>
-              
-              <button className="btn btn-success" 
+            >
+              <Link to={"/single/" + item.uid}>Link to: {item.name} </Link>
+              <button className="btn btn-success"
                 onClick={() => dispatch({
-                  type: "add_task", 
-                  payload: { id: item.id, color: '#ffa500' }
+                  type: "REMOVE_SAVED",
+                  payload: item
                 })}>
-                Change Color
+                Quitar de guardados
               </button>
             </li>
           );
